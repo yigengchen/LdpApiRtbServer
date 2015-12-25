@@ -792,10 +792,10 @@ bool CTcpSocket::TcpSslConnect()
 	if( s1!=1 || s2!=1 )
 	{
 		//ERR_print_errors_fp(stderr);
-		return FALSE;
+		return false;
 	}
 	
-	return TRUE;
+	return true;
 
 }
 
@@ -839,7 +839,7 @@ int CTcpSocket::TcpSslReadLen( void* buf, int nBytes)
 //end:
 
                 nleft=nleft-nread;
-				int sss=SSL_pending(ssl);
+				//int sss=SSL_pending(ssl);
         }while( nleft > 0 );
 
         return (nBytes-nleft);
