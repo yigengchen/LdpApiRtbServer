@@ -15,7 +15,7 @@ sed -i 's/EXPOSE_PORT/8088/g'  ./config/userQuery.conf
 sed -i 's/RTB_REDIS_NUM/1/g'  ./config/userQuery.conf
 sed -i 's/GOODS_REDIS_NUM/1/g'  ./config/userQuery.conf
 sed -i 's/TOKEN_REDIS_NUM/1/g'  ./config/userQuery.conf
-sed -i 's/THREAD_NUM/512/g'  ./config/userQuery.conf
+sed -i 's/THREAD_NUM/1024/g'  ./config/userQuery.conf
 
 #cd /usr/src/myapp && rm -Rf objs src
 ./LdpRtbServerApi -c ./config/userQuery.conf -n query
