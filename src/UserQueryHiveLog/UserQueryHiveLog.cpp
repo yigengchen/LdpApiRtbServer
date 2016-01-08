@@ -3,17 +3,43 @@
  */
 
 #include "UserQueryHiveLog.h"
-
+#include <dirent.h>
 CUserQueryHiveLog::CUserQueryHiveLog(const STATISTICSPRM_S& stHiveLogPrm)
  :m_stHiveLogPrm(stHiveLogPrm)
 {	
 	struct stat statbuf;
 	std::string strHiveLogDir;
+    struct dirent* pstDirEnt = NULL;
+	DIR *pstDir = NULL;
+	srand((int)time(0));
+	int randomInt = rand()%100000;
+
+	char randomchar[5];
+	memset(randomchar,0,5);
+	sprintf(randomchar,"%d",randomInt);
 	strHiveLogDir = m_stHiveLogPrm.m_strStatisticsPath + "/" +	BdxUserQueryHiveLogGetDate();
 	if(!m_clFile.FileBeExists(strHiveLogDir.c_str())) {
 		m_clFile.FileCreatDir(strHiveLogDir.c_str());
 	}
-	std::string strFileName = strHiveLogDir + "/"+m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour() + ".txt";
+    if((pstDir = opendir(strHiveLogDir.c_str())) == NULL) {
+    	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
+    	return ;
+    }
+    std::string tempFileName = m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour();
+	std::string strFileName = strHiveLogDir + "/"+m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour()+"_"+std::string(randomchar)+ ".txt";
+    while((pstDirEnt = readdir(pstDir))) 
+    {
+    	if( pstDirEnt->d_type != DT_DIR ) 
+		{
+			if(strstr(pstDirEnt->d_name,tempFileName.c_str())!=NULL)
+	          {
+	               strFileName =strHiveLogDir + "/" + std::string(pstDirEnt->d_name);
+	               break;
+	          }
+		}
+    	
+    }
+    closedir(pstDir);
 	m_pFile = fopen(strFileName.c_str(), "a");
 	if (!stat(strFileName.c_str(),&statbuf))
 	{
@@ -29,7 +55,7 @@ CUserQueryHiveLog::~CUserQueryHiveLog() {
 }
 void CUserQueryHiveLog::Core()
 {
-	
+
 	while(true) {
 		
 		std::vector<HIVELOCALLOG_S>::iterator itr;
@@ -52,6 +78,7 @@ void CUserQueryHiveLog::Core()
 		fflush(m_pFile);
         sleep(m_stHiveLogPrm.m_uiStatisticsTime);
 	}
+
 }
 
 std::string CUserQueryHiveLog::BdxUserQueryHiveLogGetDate(const time_t ttime)
@@ -83,10 +110,62 @@ std::string CUserQueryHiveLog::BdxUserQueryHiveLogGetHour(const time_t ttime)
 	//return (timeinfo->tm_year + 1900) * 10000 + (timeinfo->tm_mon + 1) * 100 + timeinfo->tm_mday;
 	return std::string(dt);
 }
+
+std::string CUserQueryHiveLog::BdxUserQueryHiveLogGetLastHour(const time_t ttime)
+{
+	time_t tmpTime;
+	if(ttime == 0)
+		tmpTime = time(0);
+	else
+		tmpTime = ttime;
+	tmpTime-=3600;
+	struct tm* timeinfo = localtime(&tmpTime);
+	char dt[20];
+	memset(dt, 0, 20);
+	sprintf(dt, "%02d",timeinfo->tm_hour);
+	//return (timeinfo->tm_year + 1900) * 10000 + (timeinfo->tm_mon + 1) * 100 + timeinfo->tm_mday;
+	return std::string(dt);
+}
+
+
 void CUserQueryHiveLog::BdxQueryHiveLogOpenFile()
 {
 	struct stat statbuf;
-	std::string strFileName = m_stHiveLogPrm.m_strStatisticsPath +"/" +BdxUserQueryHiveLogGetDate() + "/" + m_stHiveLogPrm.m_strStatisticsFileName +"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour() + ".txt";
+    struct dirent* pstDirEnt = NULL;
+    std::string strHiveLogDir;
+	DIR *pstDir = NULL;
+	srand((int)time(0));
+	int randomInt = rand()%100000;
+	char randomchar[5];
+	memset(randomchar,0,5);
+	sprintf(randomchar,"%d",randomInt);
+	
+	strHiveLogDir = m_stHiveLogPrm.m_strStatisticsPath + "/" +BdxUserQueryHiveLogGetDate();
+
+	if((pstDir = opendir(strHiveLogDir.c_str())) == NULL) {
+    	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
+    	return ;
+    }
+    std::string tempFileName = m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour();
+    std::string tempLastHourFileName = m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetLastHour();
+	std::string strFileName = strHiveLogDir + "/"+m_stHiveLogPrm.m_strStatisticsFileName+"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour()+"_"+std::string(randomchar)+ ".txt";
+	//printf("tempFileName=%s\n",tempFileName.c_str());
+	//printf("strFileName=%s\n",strFileName.c_str());
+    while((pstDirEnt = readdir(pstDir))) 
+    {
+    	if( pstDirEnt->d_type != DT_DIR ) 
+		{
+			if(strstr(pstDirEnt->d_name,tempFileName.c_str())!=NULL)
+	          {
+	               strFileName =strHiveLogDir + "/" + std::string(pstDirEnt->d_name);
+	               break;
+	          }
+		}
+    	
+    }
+    closedir(pstDir);
+    
+	//strFileName = m_stHiveLogPrm.m_strStatisticsPath +"/" +BdxUserQueryHiveLogGetDate() + "/" + m_stHiveLogPrm.m_strStatisticsFileName +"_"+ BdxUserQueryHiveLogGetDate()+"_"+BdxUserQueryHiveLogGetHour() + ".txt";
 	if(!m_clFile.FileBeExists(strFileName.c_str())) 
 	{
 		if(m_pFile){
@@ -108,7 +187,7 @@ void CUserQueryHiveLog::BdxQueryHiveLogOpenFile()
 
 void CUserQueryHiveLog::BdxQueryHiveLogWriteTitle()
 {
-	printf("BdxQueryHiveLogWriteTitle.....\n");
+	//printf("BdxQueryHiveLogWriteTitle.....\n");
 }
 
 void CUserQueryHiveLog::BdxQueryHiveLogGetReport()

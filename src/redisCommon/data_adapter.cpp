@@ -47,6 +47,7 @@ bool CDataAdapter::Init(const char *redis_list) {
 			
 			return false;
 		}
+		//LOG(DEBUG,"[%u]connect[%s:%u,%u].[%s:%d]\n",i,host,port,idx,__FILE__,__LINE__);
 		printf("DEBUG [%u]connect[%s:%u,%u].[%s:%d]\n",i,host,port,idx,__FILE__,__LINE__);
 		pthread_mutex_init(& lock_[i],NULL);
 	}

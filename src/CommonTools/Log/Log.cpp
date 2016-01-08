@@ -175,7 +175,13 @@ bool CLog::LogCreatLogDir()
 {
 	std::vector<std::string> vecFiles;
 	std::string strLogDir = std::string(m_pszPathName) + "/" + LogGetDate();
-			
+
+	srand((int)time(0)+987654321);
+	int randomInt = rand()%100000;
+	char randomchar[5];
+	memset(randomchar,0,5);
+	sprintf(randomchar,"%d",randomInt);
+	
 	if(!LogFileBeExists(strLogDir.c_str())) {
 	
 		m_iLogFileId = 0;
@@ -206,7 +212,7 @@ bool CLog::LogCreatLogDir()
 			fclose(m_pFile);
 			m_pFile = NULL;
 		}
-		std::string strFileName = strLogDir + "/" + std::string(m_pszFileName) + toString(m_iLogFileId);
+		std::string strFileName = strLogDir + "/" + std::string(m_pszFileName) + toString(m_iLogFileId)+"."+std::string(randomchar);
 		m_pFile = fopen(strFileName.c_str(), "a");
 		if(m_pFile == NULL) return false;
 		m_iLogFileId ++;

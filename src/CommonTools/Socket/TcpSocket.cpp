@@ -28,12 +28,10 @@ CTcpSocket::CTcpSocket(const in_port_t in_portPort, const std::string& strIp, co
  : m_in_portPort(in_portPort), m_strIp(strIp), m_uiTimeout(uiTimeout)
 {	
 	m_iSockfd = socket(AF_INET, SOCK_STREAM, 0);
-	//printf("create m_iSockfd=%d\n",m_iSockfd);
 	if (m_iSockfd == -1) {
 		throw std::runtime_error("get socketfd error.");
 	}
 	m_bConnect = false;
-	printf("m_iSockfd=%d\n",m_iSockfd);
 }
 
 /*
@@ -41,13 +39,10 @@ CTcpSocket::CTcpSocket(const in_port_t in_portPort, const std::string& strIp, co
  */
 CTcpSocket::~CTcpSocket() throw()
 {
-	
-	//printf("m_iSockfd=%d,~CTcpSocket......\n",m_iSockfd);
 	struct linger so_linger;
 	so_linger.l_onoff = true;
 	so_linger.l_linger = 0;
 	setsockopt(m_iSockfd,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(so_linger));
-	printf("clsing socket ~~~~~~~~~~CTcpSocket\n");
 	if(m_iSockfd != -1){
 		::close(m_iSockfd);
 		m_iSockfd = -1;
@@ -380,7 +375,6 @@ int CTcpSocket::TcpReadAll(void *const pvRecvBuf, size_t sizeRecvLen)
 
 bool CTcpSocket::TcpWrite(const void *pvSendBuf,size_t sizeSendLen)
 {
-	printf("m_iSockfd=%d\n",m_iSockfd);
 	if(!pvSendBuf || sizeSendLen <= 0) {//参数有误
 		return false;
 	}
@@ -397,9 +391,7 @@ bool CTcpSocket:: TcpClose()
 	so_linger.l_onoff = true;
 	so_linger.l_linger = 0;
 	setsockopt(m_iSockfd,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(so_linger));
-	//printf("m_bConnect=%d,m_iSockfd=%d\n",m_bConnect,m_iSockfd);
 	if(m_bConnect) {
-	//printf("before close socket %d\n",m_iSockfd);
 		if(m_iSockfd != -1)
 		{
 			::close(m_iSockfd);
@@ -407,7 +399,6 @@ bool CTcpSocket:: TcpClose()
 		}
 		m_bConnect = false;
 	}
-	//printf("after close socket %d\n",m_iSockfd);
 	return true;
 }
 int CTcpSocket::EncodingBase64(char * pInput, char * pOutput)
@@ -654,16 +645,12 @@ bool CTcpSocket:: TcpCloseFinal()
 	so_linger.l_onoff = true;
 	so_linger.l_linger = 0;
 	setsockopt(m_iSockfd,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(so_linger));
-	//printf("m_bConnect=%d,m_iSockfd=%d\n",m_bConnect,m_iSockfd);
-	printf("before close socket %d\n",m_iSockfd);
 		if(m_iSockfd != -1)
 		{
 			::close(m_iSockfd);
 			m_iSockfd=-1;
 		}
 		m_bConnect = false;
-	
-	printf("after close socket %d\n",m_iSockfd);
 	return true;
 }
 
@@ -783,9 +770,7 @@ int CTcpSocket::TcpSslInitEnv()
 }
 
 bool CTcpSocket::TcpSslConnect()
-{
-	//printf("m_iSockfd=%d\n",m_iSockfd);
-	
+{	
 	int s1=SSL_set_fd(ssl,m_iSockfd);					
 	int s2=SSL_connect(ssl);
 	//printf("s1=%d,s2=%d\n",s1,s2);

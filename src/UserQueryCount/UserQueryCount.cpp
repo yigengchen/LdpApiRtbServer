@@ -9,11 +9,42 @@ CUserQueryCount::CUserQueryCount(const STATISTICSPRM_S& stStatisticsPrm)
 {	
 	struct stat statbuf;
 	// TODO Auto-generated constructor stub
+	struct dirent* pstDirEnt = NULL;
+	std::string strHiveLogDir;
+	DIR *pstDir = NULL;
+	srand((int)time(0)+123456789);
+	int randomInt = rand()%100000;
+	char randomchar[5];
+	memset(randomchar,0,5);
+	sprintf(randomchar,"%d",randomInt);
+	
 	std::string statusDir= m_stStatisticsPrm.m_strStatisticsPath+"/"+BdxUserQueryCountGetDate();
 	if(!m_clFile.FileBeExists(statusDir.c_str())) {
 		m_clFile.FileCreatDir(statusDir.c_str());
 	}
-	std::string strFileName = statusDir + "/"+m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate() + ".txt";
+
+	if((pstDir = opendir(statusDir.c_str())) == NULL) {
+    	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
+    	return ;
+    }
+
+    std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
+	std::string strFileName = statusDir + "/"+m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate()+"_"+ std::string(randomchar) + ".txt";
+
+	while((pstDirEnt = readdir(pstDir))) 
+    {
+    	if( pstDirEnt->d_type != DT_DIR ) 
+		{
+			if(strstr(pstDirEnt->d_name,tempFileName.c_str())!=NULL)
+	          {
+	               strFileName =statusDir + "/" + std::string(pstDirEnt->d_name);
+	               break;
+	          }
+		}
+    	
+    }
+    closedir(pstDir);
+    
 	m_pFile = fopen(strFileName.c_str(), "a");
 	if (!stat(strFileName.c_str(),&statbuf))
 	{
@@ -37,7 +68,8 @@ CUserQueryCount::~CUserQueryCount() {
 }
 void CUserQueryCount::Core()
 {
-	
+
+
 	while(true) {
 		
 		std::map<std::string,USERINFO_S>::iterator itr;
@@ -60,6 +92,7 @@ void CUserQueryCount::Core()
 		m_stReport = 0;
         sleep(m_stStatisticsPrm.m_uiStatisticsTime);
 	}
+
 }
 
 std::string CUserQueryCount::BdxUserQueryCountGetDate(const time_t ttime)
@@ -80,8 +113,39 @@ std::string CUserQueryCount::BdxUserQueryCountGetDate(const time_t ttime)
 void CUserQueryCount::BdxQueryCountOpenFile()
 {
 	struct stat statbuf;
-	std::string strFileName = 
-	m_stStatisticsPrm.m_strStatisticsPath+"/"+BdxUserQueryCountGetDate()+ "/" + m_stStatisticsPrm.m_strStatisticsFileName +"_"+ BdxUserQueryCountGetDate() + ".txt";
+	struct dirent* pstDirEnt = NULL;
+	std::string strHiveLogDir;
+	DIR *pstDir = NULL;
+	srand((int)time(0)+123456789);
+	int randomInt = rand()%100000;
+	char randomchar[5];
+	memset(randomchar,0,5);
+	sprintf(randomchar,"%d",randomInt);
+
+	std::string statusDir= m_stStatisticsPrm.m_strStatisticsPath+"/"+BdxUserQueryCountGetDate();
+	if((pstDir = opendir(statusDir.c_str())) == NULL) {
+    	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
+    	return ;
+    }
+
+    
+	std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
+	std::string strFileName = statusDir + "/"+m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate()+"_"+ std::string(randomchar) + ".txt";
+
+	while((pstDirEnt = readdir(pstDir))) 
+    {
+    	if( pstDirEnt->d_type != DT_DIR ) 
+		{
+			if(strstr(pstDirEnt->d_name,tempFileName.c_str())!=NULL)
+	          {
+	               strFileName =statusDir + "/" + std::string(pstDirEnt->d_name);
+	               break;
+	          }
+		}
+    	
+    }
+    closedir(pstDir);
+    
 	if(!m_clFile.FileBeExists(strFileName.c_str())) {
 		if(m_pFile){
 			fclose(m_pFile);

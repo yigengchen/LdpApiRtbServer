@@ -47,7 +47,8 @@ CUserQueryUpdate::CUserQueryUpdate(const IPPORT_S &stTokenServer,const MYSQL_SER
 	sprintf(chPort,"%d",stTokenServer.m_uiPort);
 	sprintf(chIdx,"%d",stTokenServer.m_idx);
 	string strServerList = string(chCount)+";"+string(stTokenServer.m_pchIp)+":"+string(chPort)+","+string(chIdx)+";";
-	
+
+	printf("==============redis info==============\n");
   	printf("Redis Server=%s\n",strServerList.c_str());
 	//m_pTokenRedis->Init(strServerList.c_str());
   
@@ -57,7 +58,7 @@ CUserQueryUpdate::CUserQueryUpdate(const IPPORT_S &stTokenServer,const MYSQL_SER
 	printf("%s\n",mySqlInfo.pchUserName);
 	printf("%s\n",mySqlInfo.pchPassWord);
 	printf("%s\n",mySqlInfo.pchDbName);
-	printf("======================================\n");
+	//printf("======================================\n");
 	m_stMysqlServerInfo->InitMysql(mySqlInfo.m_stMysqlLinkInfo.m_pchIp,mySqlInfo.m_stMysqlLinkInfo.m_uiPort,mySqlInfo.pchUserName,mySqlInfo.pchPassWord,mySqlInfo.pchDbName);
 
 }
@@ -80,7 +81,7 @@ void CUserQueryUpdate::GetMysqlFieldsUserInfo(std::string strUserInfo,BDXPERMISS
 	memset(temp,0,PACKET);
 	memset(bufTemp,0,PACKET);
 	mVecFieldsUser.mVecFields.clear();
-					printf("strUserInfo=%s\n",strUserInfo.c_str());
+					//printf("strUserInfo=%s\n",strUserInfo.c_str());
 					buf = const_cast<char*>(strUserInfo.c_str());
 					while((temp[index] = strtok_r(buf,";", &outer_ptr))!=NULL)   
 					{  	
@@ -524,7 +525,7 @@ void CUserQueryUpdate::Core()
 	  	#ifdef __MONITOR_API__
 
 		//MonitorRemoteApiWangGuan();
-		MonitorRemoteApiHuaWei();
+		//MonitorRemoteApiHuaWei();
 									
 		#endif //__MONITOR_API__
 		
@@ -555,7 +556,7 @@ void CUserQueryUpdate::Core()
 							std::map<std::string,BDXPERMISSSION_S>::iterator itr;
 							std::vector<std::string>::iterator itr2;
 							#if 1
-							printf("===================temp_mapUserInfo========================\n");
+							printf("===================g_mapUserInfo========================\n");
 							for(itr=temp_mapUserInfo.begin();itr!=temp_mapUserInfo.end();itr++)
 							{	
 								printf("%s ",itr->first.c_str());
@@ -571,7 +572,7 @@ void CUserQueryUpdate::Core()
 								printf("\n");
 							}
 							#endif
-							#if 1
+							#if 0
 							printf("===================g_mapUserInfo========================\n");
 							for(itr=g_mapUserInfo.begin();itr!=g_mapUserInfo.end();itr++)
 							{	

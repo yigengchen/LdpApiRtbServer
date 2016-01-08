@@ -18,6 +18,7 @@ public:
 protected:
 	std::string BdxUserQueryHiveLogGetDate(const time_t ttime = 0);
 	std::string BdxUserQueryHiveLogGetHour(const time_t ttime = 0);
+	std::string BdxUserQueryHiveLogGetLastHour(const time_t ttime = 0);
 	void BdxQueryHiveLogOpenFile();
 	void BdxQueryHiveLogWriteTitle();
 	void BdxQueryHiveLogGetReport();

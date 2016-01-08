@@ -178,7 +178,6 @@ bool CUserQueryServer::BdxServerGetFreeTask()
 			stTaskStatus = CUserQueryWorkThreads::m_vecTaskStauts[i].front();
 			CUserQueryWorkThreads::m_vecTaskStauts[i].pop();
 			mit = m_mpSocketTask.find(stTaskStatus.m_iSockFd);
-			//printf("stTaskStatus.m_iSockFd=%d\n",stTaskStatus.m_iSockFd);
 			if(mit == m_mpSocketTask.end()) {
 				LOG(REQUIRED, "can not find task  memory can not free !!!!!.");
 				continue;
