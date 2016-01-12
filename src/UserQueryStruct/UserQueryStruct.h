@@ -70,7 +70,7 @@
 #define REQ_TYPE 		"GET"
 
 #define KEY_USER		"user"
-#define KEY_VALUE 		"token"
+#define KEY_VALUE 		"auth"
 #define KEY_SHOPID		"shopid"
 #define KEY_GOODSID		"goodsid"
 #define KEY_KEY 		"key"
