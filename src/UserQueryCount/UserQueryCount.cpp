@@ -14,23 +14,29 @@ CUserQueryCount::CUserQueryCount(const STATISTICSPRM_S& stStatisticsPrm)
 	DIR *pstDir = NULL;
 	srand((int)time(0)+123456789);
 	int randomInt = rand()%100000;
+
+	m_RandomInt = randomInt;
+	
+	
 	char randomchar[5];
 	memset(randomchar,0,5);
-	sprintf(randomchar,"%d",randomInt);
+	sprintf(randomchar,"%d",m_RandomInt);
 	
 	std::string statusDir= m_stStatisticsPrm.m_strStatisticsPath+"/"+BdxUserQueryCountGetDate();
 	if(!m_clFile.FileBeExists(statusDir.c_str())) {
 		m_clFile.FileCreatDir(statusDir.c_str());
 	}
 
+	#if 0
 	if((pstDir = opendir(statusDir.c_str())) == NULL) {
     	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
     	return ;
     }
-
-    std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
+	#endif
+    //std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
 	std::string strFileName = statusDir + "/"+m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate()+"_"+ std::string(randomchar) + ".txt";
 
+	#if 0
 	while((pstDirEnt = readdir(pstDir))) 
     {
     	if( pstDirEnt->d_type != DT_DIR ) 
@@ -44,7 +50,7 @@ CUserQueryCount::CUserQueryCount(const STATISTICSPRM_S& stStatisticsPrm)
     	
     }
     closedir(pstDir);
-    
+    #endif
 	m_pFile = fopen(strFileName.c_str(), "a");
 	if (!stat(strFileName.c_str(),&statbuf))
 	{
@@ -120,18 +126,20 @@ void CUserQueryCount::BdxQueryCountOpenFile()
 	int randomInt = rand()%100000;
 	char randomchar[5];
 	memset(randomchar,0,5);
-	sprintf(randomchar,"%d",randomInt);
+	sprintf(randomchar,"%d",m_RandomInt);
 
 	std::string statusDir= m_stStatisticsPrm.m_strStatisticsPath+"/"+BdxUserQueryCountGetDate();
+	#if 0
 	if((pstDir = opendir(statusDir.c_str())) == NULL) {
     	printf("Line:%d,FileName:%s,open dir failed.\n",__LINE__,__FILE__);
     	return ;
     }
-
+	#endif
     
-	std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
+	//std::string tempFileName = m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate();
 	std::string strFileName = statusDir + "/"+m_stStatisticsPrm.m_strStatisticsFileName+"_"+ BdxUserQueryCountGetDate()+"_"+ std::string(randomchar) + ".txt";
-
+	printf("Status File strFileName=%s\n",strFileName.c_str());
+	#if 0
 	while((pstDirEnt = readdir(pstDir))) 
     {
     	if( pstDirEnt->d_type != DT_DIR ) 
@@ -145,7 +153,7 @@ void CUserQueryCount::BdxQueryCountOpenFile()
     	
     }
     closedir(pstDir);
-    
+    #endif
 	if(!m_clFile.FileBeExists(strFileName.c_str())) {
 		if(m_pFile){
 			fclose(m_pFile);

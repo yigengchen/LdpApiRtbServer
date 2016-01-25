@@ -88,7 +88,8 @@ bool CUserQueryWorkThreads::AdWorkInit(const IPPORT_S& stRedisServer,const IPPOR
 {
 	m_uiThreadId = m_uiCount++;
 	m_pDataRedis = new CDataAdapter;
-	m_pGoodsRedis = new CDataAdapter;
+
+	//m_pGoodsRedis = new CDataAdapter;
 	/*
 	m_pUdpSocket = new CUdpSocket;
 		
@@ -117,7 +118,7 @@ bool CUserQueryWorkThreads::AdWorkInit(const IPPORT_S& stRedisServer,const IPPOR
 	sprintf(chIdx,"%d",stRedisServer2.m_idx);
 
 	string strServerList2 = string(chCount)+";"+string(stRedisServer2.m_pchIp)+":"+string(chPort)+","+string(chIdx)+";";
-	m_pGoodsRedis->Init(strServerList2.c_str());
+	//m_pGoodsRedis->Init(strServerList2.c_str());
 
 	TASKQUE_S* pstTaskQue = new TASKQUE_S;
 	if(!pstTaskQue) {

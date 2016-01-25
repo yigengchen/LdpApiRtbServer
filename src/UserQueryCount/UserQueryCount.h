@@ -25,6 +25,8 @@ private:
 	FILE* m_pFile;
 	STATISTICSPRM_S m_stStatisticsPrm;
 	UESRQUERYRPORT_S m_stReport;
+	std::string currentHour;
+	int m_RandomInt;
 };
 
 #endif /* __USERQUERYCOUNT_H__ */

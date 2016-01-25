@@ -83,6 +83,7 @@ void CUserQueryMain::UserQueryMainCore()
 		m_cThreads.CreateThead(pCount);
 	}
 
+
 	{
 		CUserQueryHiveLog* pHiveLog = new CUserQueryHiveLog(m_stHiveLogPrm);
 		m_cThreads.SetRoutine(StartRoutine<CUserQueryHiveLog>);
@@ -471,11 +472,13 @@ bool CUserQueryMain::BdxGetServerUrlAPI(CConf *pCConf, char *pszSection)
 					    	if( index%5 == 4 )
 					        {
 					        	memcpy(sQueryInfo.mParam, temp[index-3],_128BYTES);
-					        	sQueryInfo.mProvince = atol(temp[index-2]);
+					        	//sQueryInfo.mProvince = atol(temp[index-2]);
+					        	printf("string(temp[index-2])=%s\n",string(temp[index-2]).c_str());
+					        	sQueryInfo.mProvince = string(temp[index-2]);
 					        	memcpy(sQueryInfo.mCarrierOperator, temp[index-1], BUF_SIZE_8BYTE);
 					        	sQueryInfo.mQueryLimits = atol(temp[index]);
 					        	printf("sQueryInfo.mParam=%s\n",sQueryInfo.mParam);
-					        	printf("sQueryInfo.mProvince=%ld\n",sQueryInfo.mProvince);
+					        	printf("sQueryInfo.mProvince=%s\n",sQueryInfo.mProvince.c_str());
 					        	printf("sQueryInfo.mCarrierOperator=%s\n",sQueryInfo.mCarrierOperator);
 					        	printf("sQueryInfo.mQueryLimits=%ld\n",sQueryInfo.mQueryLimits);
 					            g_vecUrlAPIS[temp[index-4]]=sQueryInfo;

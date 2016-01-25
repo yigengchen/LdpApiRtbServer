@@ -28,6 +28,9 @@ private:
 	STATISTICSPRM_S m_stStatisticsPrm;
 	STATISTICSPRM_S m_stHiveLogPrm;
 	HIVELOCALLOG_S m_stHiveLog;
+	std::string currentHour;
+	int m_RandomInt;
+	
 };
 
 #endif /* __USERQUERYHIVELOG_H__ */
