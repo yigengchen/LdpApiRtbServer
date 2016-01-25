@@ -6,7 +6,7 @@
 #include <dirent.h>
 CUserQueryHiveLog::CUserQueryHiveLog(const STATISTICSPRM_S& stHiveLogPrm)
  :m_stHiveLogPrm(stHiveLogPrm)
-{
+{	
 	struct stat statbuf;
 	std::string strHiveLogDir;
     struct dirent* pstDirEnt = NULL;

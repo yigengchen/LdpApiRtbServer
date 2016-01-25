@@ -70,10 +70,7 @@
 #define REQ_TYPE 		"GET"
 
 #define KEY_USER		"user"
-<<<<<<< HEAD
 #define KEY_RET_KEY		"rkey"
-=======
->>>>>>> 239deee8a44de0e1d3dc720de93e76fa6fe634b1
 #define KEY_VALUE 		"auth"
 #define KEY_SHOPID		"shopid"
 #define KEY_GOODSID		"goodsid"
