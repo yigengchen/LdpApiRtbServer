@@ -2228,7 +2228,7 @@ HIVELOCALLOG_S stHiveLog;
 		CUserQueryWorkThreads::m_vecHiveLog[m_uiThreadId].push(stHiveLog);
 		if(stResponseInfo.mResValue.find(signOK)!=std::string::npos)
 		{
-			if(!m_pDataRedis->UserPut(strRetKey,stResponseInfo.mResValue)
+			if(!m_pDataRedis->UserPut(strRetKey,stResponseInfo.mResValue))
 			{	
 				 	LOG(ERROR, "[thread: %d]Set HotKey Error.", m_uiThreadId);						
 			}
