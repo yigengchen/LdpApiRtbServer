@@ -957,7 +957,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 									
 									if(m_pDataRedis->UserGet(stResponseInfo.ssOperatorNameKeyLimit,ssmoidValue))
 									{	
-										//ÔËÓªÉÌºÍÊ¡·İ¶¼²»Îª¿ÕµÄ²ÅÏŞÖÆ;Ã»ÓĞµÄÊ±ºòÖ»²é±¾µØ,²»×öÏŞÖÆ
+										//è¿è¥å•†å’Œçœä»½éƒ½ä¸ä¸ºç©ºçš„æ‰é™åˆ¶;æ²¡æœ‰çš„æ—¶å€™åªæŸ¥æœ¬åœ°,ä¸åšé™åˆ¶
 										if(atol(ssmoidValue.c_str())>= it->second.mQueryLimits)//&&(!strProvince.empty()&&!strOperator.empty()))
 										{
 											errorMsg = "EE0005";//interal use
@@ -1108,7 +1108,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 									
 									if(m_pDataRedis->UserGet(stResponseInfo.ssOperatorNameKeyLimit,ssmoidValue))
 									{	
-										//ÔËÓªÉÌºÍÊ¡·İ¶¼²»Îª¿ÕµÄ²ÅÏŞÖÆ;Ã»ÓĞµÄÊ±ºòÖ»²é±¾µØ,²»×öÏŞÖÆ
+										//è¿è¥å•†å’Œçœä»½éƒ½ä¸ä¸ºç©ºçš„æ‰é™åˆ¶;æ²¡æœ‰çš„æ—¶å€™åªæŸ¥æœ¬åœ°,ä¸åšé™åˆ¶
 										if(atol(ssmoidValue.c_str())>= it->second.mQueryLimits)//&&(!strProvince.empty()&&!strOperator.empty()))
 										{
 											errorMsg = "EE0005";// interal use
@@ -1257,7 +1257,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 									
 									if(m_pDataRedis->UserGet(stResponseInfo.ssOperatorNameKeyLimit,ssmoidValue))
 									{	
-										//ÔËÓªÉÌºÍÊ¡·İ¶¼²»Îª¿ÕµÄ²ÅÏŞÖÆ;Ã»ÓĞµÄÊ±ºòÖ»²é±¾µØ,²»×öÏŞÖÆ
+										//è¿è¥å•†å’Œçœä»½éƒ½ä¸ä¸ºç©ºçš„æ‰é™åˆ¶;æ²¡æœ‰çš„æ—¶å€™åªæŸ¥æœ¬åœ°,ä¸åšé™åˆ¶
 										if(atol(ssmoidValue.c_str())>= it->second.mQueryLimits)//&&(!strProvince.empty()&&!strOperator.empty()))
 										{
 											errorMsg = "EE0005";//interal use
@@ -1419,7 +1419,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 									
 									if(m_pDataRedis->UserGet(stResponseInfo.ssOperatorNameKeyLimit,ssmoidValue))
 									{	
-										//ÔËÓªÉÌºÍÊ¡·İ¶¼²»Îª¿ÕµÄ²ÅÏŞÖÆ;Ã»ÓĞµÄÊ±ºòÖ»²é±¾µØ,²»×öÏŞÖÆ
+										//è¿è¥å•†å’Œçœä»½éƒ½ä¸ä¸ºç©ºçš„æ‰é™åˆ¶;æ²¡æœ‰çš„æ—¶å€™åªæŸ¥æœ¬åœ°,ä¸åšé™åˆ¶
 										if(atol(ssmoidValue.c_str())>= it->second.mQueryLimits)//&&(!strProvince.empty()&&!strOperator.empty()))
 										{
 											errorMsg = "EE0005";// interal use
@@ -1650,7 +1650,7 @@ string key;
 
 							if(m_pDataRedis->UserGet(stResponseInfo.ssOperatorNameKeyLimit,ssmoidValue))
 							{	
-								//ÔËÓªÉÌºÍÊ¡·İ¶¼²»Îª¿ÕµÄ²ÅÏŞÖÆ;Ã»ÓĞµÄÊ±ºòÖ»²é±¾µØ,²»×öÏŞÖÆ
+								//è¿è¥å•†å’Œçœä»½éƒ½ä¸ä¸ºç©ºçš„æ‰é™åˆ¶;æ²¡æœ‰çš„æ—¶å€™åªæŸ¥æœ¬åœ°,ä¸åšé™åˆ¶
 								if(atol(ssmoidValue.c_str())>= it->second.mQueryLimits)//&&(!strProvince.empty()&&!strOperator.empty()))
 								{
 									errorMsg = "E0005";
@@ -2226,9 +2226,12 @@ HIVELOCALLOG_S stHiveLog;
 		stHiveLog.strHourId=stHiveLog.strQueryTime.substr(8,2);
 		signOK = "\"status\":\"SUCCEED\"";
 		CUserQueryWorkThreads::m_vecHiveLog[m_uiThreadId].push(stHiveLog);
-		if(!m_pDataRedis->UserPut(strRetKey,stResponseInfo.mResValue)&&stResponseInfo.mResValue.find(signOK)!=std::string::npos)
-		{	
-			 	LOG(ERROR, "[thread: %d]Set HotKey Error.", m_uiThreadId);						
+		if(stResponseInfo.mResValue.find(signOK)!=std::string::npos)
+		{
+			if(!m_pDataRedis->UserPut(strRetKey,stResponseInfo.mResValue)
+			{	
+				 	LOG(ERROR, "[thread: %d]Set HotKey Error.", m_uiThreadId);						
+			}
 		}
 		return SUCCESS;
 
@@ -2967,14 +2970,14 @@ std::string CTaskMain::BdxGetParamSign(const std::string& strParam, const std::s
 	std::string strParamKey = strParam + strSign;
 	printf("Line:%d,strParamKey=%s\n",__LINE__,strParamKey.c_str());
 
-    //è®¡ç®—å‚æ•°ä¸²çš„128ä½MD5
+    //ç’ï¼„ç•»é™å‚›æšŸæ¶“èŒ¬æ®‘128æµ£å³‚D5
     m_clMd5.Md5Init();
     m_clMd5.Md5Update((u_char*)strParamKey.c_str(), strParamKey.length());
 
     u_char pszParamSign[16];
     m_clMd5.Md5Final(pszParamSign);
 
-    //ä»¥16è¿›åˆ¶æ•°è¡¨ç¤º
+    //æµ ï¿½16æ©æ¶˜åŸ—éæ‹Œã€ƒç»€ï¿½
     for (unsigned char i = 0; i < sizeof(pszParamSign); i++) {
     	sprintf(&pszMd5Hex[i * 2], "%c", to_hex(pszParamSign[i] >> 4));
     	sprintf(&pszMd5Hex[i * 2 + 1], "%c", to_hex((pszParamSign[i] << 4) >> 4));
