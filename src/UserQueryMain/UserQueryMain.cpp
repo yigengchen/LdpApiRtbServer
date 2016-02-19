@@ -62,6 +62,8 @@ void CUserQueryMain::UserQueryMainCore()
 	}  
 
 	pthread_mutex_init (&mutex,NULL);
+
+
 	for(u_int i = 0; i < m_uiThreadsNum; ++i) {
 		CUserQueryWorkThreads* pclWorkThread = new CUserQueryWorkThreads(m_stServerInfo.m_stRedisServer,m_stServerInfo.m_stGoodsServer);
 		m_cThreads.SetRoutine(StartRoutine<CUserQueryWorkThreads>);
@@ -70,6 +72,7 @@ void CUserQueryMain::UserQueryMainCore()
 	}
 	LOG(DEBUG, "start work threads ok.");
 
+
 #if 0
 	for(std::map<std::string,std::string>::iterator itr = g_vecUrlAPIS.begin();itr!=g_vecUrlAPIS.end();itr++)
 	{
@@ -77,6 +80,8 @@ void CUserQueryMain::UserQueryMainCore()
 	}
 
 #endif
+
+
 	{
 		CUserQueryCount* pCount = new CUserQueryCount(m_stStatisticsPrm);
 		m_cThreads.SetRoutine(StartRoutine<CUserQueryCount>);
@@ -89,14 +94,13 @@ void CUserQueryMain::UserQueryMainCore()
 		m_cThreads.CreateThead(pHiveLog);
 	}
 
+
 	{
 		CUserQueryUpdate* pMonitorThread = new CUserQueryUpdate(m_stServerInfo.m_stTokenServer,m_stMysqlInfo);
 		m_cThreads.SetRoutine(StartRoutine<CUserQueryUpdate>);
 		m_cThreads.CreateThead(pMonitorThread);
 	}
 	
-	//sleep(10);//fix the bug E0011,after connect mysql , then start listen 8088
-
 	{
 		CUserQueryServer* pServer = new CUserQueryServer(m_stServerInfo.m_stLocalServer, m_uiThreadsNum);
 		m_cThreads.SetRoutine(StartRoutine<CUserQueryServer>);
@@ -471,11 +475,13 @@ bool CUserQueryMain::BdxGetServerUrlAPI(CConf *pCConf, char *pszSection)
 					    	if( index%5 == 4 )
 					        {
 					        	memcpy(sQueryInfo.mParam, temp[index-3],_128BYTES);
-					        	sQueryInfo.mProvince = atol(temp[index-2]);
+					        	//sQueryInfo.mProvince = atol(temp[index-2]);
+					        	printf("string(temp[index-2])=%s\n",string(temp[index-2]).c_str());
+					        	sQueryInfo.mProvince = string(temp[index-2]);
 					        	memcpy(sQueryInfo.mCarrierOperator, temp[index-1], BUF_SIZE_8BYTE);
 					        	sQueryInfo.mQueryLimits = atol(temp[index]);
 					        	printf("sQueryInfo.mParam=%s\n",sQueryInfo.mParam);
-					        	printf("sQueryInfo.mProvince=%ld\n",sQueryInfo.mProvince);
+					        	printf("sQueryInfo.mProvince=%s\n",sQueryInfo.mProvince.c_str());
 					        	printf("sQueryInfo.mCarrierOperator=%s\n",sQueryInfo.mCarrierOperator);
 					        	printf("sQueryInfo.mQueryLimits=%ld\n",sQueryInfo.mQueryLimits);
 					            g_vecUrlAPIS[temp[index-4]]=sQueryInfo;

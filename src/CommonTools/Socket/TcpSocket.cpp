@@ -28,6 +28,7 @@ CTcpSocket::CTcpSocket(const in_port_t in_portPort, const std::string& strIp, co
  : m_in_portPort(in_portPort), m_strIp(strIp), m_uiTimeout(uiTimeout)
 {	
 	m_iSockfd = socket(AF_INET, SOCK_STREAM, 0);
+	printf("m_iSockfd=%d is created....\n",m_iSockfd);
 	if (m_iSockfd == -1) {
 		throw std::runtime_error("get socketfd error.");
 	}
@@ -196,7 +197,7 @@ CTcpSocket* CTcpSocket::TcpAccept()
 	if((iclientfd = ::accept(m_iSockfd, (struct sockaddr *)&stClientAddr, &uiSinSize)) < 0) {//accept失败
 		return false;
 	}
-	return new CTcpSocket(iclientfd, m_uiTimeout);
+	return new CTcpSocket(iclientfd, m_uiTimeout); 
 }
 
 /*
@@ -391,6 +392,7 @@ bool CTcpSocket:: TcpClose()
 	so_linger.l_onoff = true;
 	so_linger.l_linger = 0;
 	setsockopt(m_iSockfd,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(so_linger));
+	printf("m_iSockfd=%d is closing \n",m_iSockfd);
 	if(m_bConnect) {
 		if(m_iSockfd != -1)
 		{

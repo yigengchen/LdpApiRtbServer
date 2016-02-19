@@ -71,6 +71,7 @@ void CUserQueryWorkThreads::Core()
 		if(iRes != SUCCESS) {
 			LOG(DEBUG, "[thread: %d]BdxRunTask error [return : %d].", m_uiThreadId, iRes);
 			stTaskStatus.m_bStatus = false;
+			pclTask = NULL;
 		} else {
 			stTaskStatus.m_bStatus = true;
 		}
@@ -88,7 +89,8 @@ bool CUserQueryWorkThreads::AdWorkInit(const IPPORT_S& stRedisServer,const IPPOR
 {
 	m_uiThreadId = m_uiCount++;
 	m_pDataRedis = new CDataAdapter;
-	m_pGoodsRedis = new CDataAdapter;
+
+	//m_pGoodsRedis = new CDataAdapter;
 	/*
 	m_pUdpSocket = new CUdpSocket;
 		
@@ -111,13 +113,17 @@ bool CUserQueryWorkThreads::AdWorkInit(const IPPORT_S& stRedisServer,const IPPOR
 
 	string strServerList = string(chCount)+";"+string(stRedisServer.m_pchIp)+":"+string(chPort)+","+string(chIdx)+";";
 	m_pDataRedis->Init(strServerList.c_str());
+  	//printf("Redis Server=%s\n",strServerList2.c_str());
 
 	sprintf(chCount,"%d",stRedisServer2.m_count);
 	sprintf(chPort,"%d",stRedisServer2.m_uiPort);
 	sprintf(chIdx,"%d",stRedisServer2.m_idx);
 
 	string strServerList2 = string(chCount)+";"+string(stRedisServer2.m_pchIp)+":"+string(chPort)+","+string(chIdx)+";";
-	m_pGoodsRedis->Init(strServerList2.c_str());
+	printf("==============redis info==============\n");
+
+
+	//m_pGoodsRedis->Init(strServerList2.c_str());
 
 	TASKQUE_S* pstTaskQue = new TASKQUE_S;
 	if(!pstTaskQue) {

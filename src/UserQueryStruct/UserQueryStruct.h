@@ -70,6 +70,7 @@
 #define REQ_TYPE 		"GET"
 
 #define KEY_USER		"user"
+#define KEY_RET_KEY		"rkey"
 #define KEY_VALUE 		"auth"
 #define KEY_SHOPID		"shopid"
 #define KEY_GOODSID		"goodsid"
@@ -109,6 +110,7 @@ std::string strCreateTime;
 std::string strLastDataTime;
 std::string strQueryTime;
 std::string strDspName;
+std::string strReqParams;
 std::string strProvider;
 std::string strProvince;
 std::string strDayId;
@@ -123,6 +125,7 @@ void operator =(const M_HIVELOG &hive)
 	strLastDataTime	=	hive.strLastDataTime;
 	strQueryTime	=	hive.strQueryTime;
 	strDspName		=	hive.strDspName;  
+	strReqParams	=	hive.strReqParams;  
 	strProvider		=	hive.strProvider; 
 	strProvince		=	hive.strProvince;
 	strDayId		=	hive.strDayId;
@@ -234,7 +237,8 @@ typedef struct {
 typedef struct {
 	char  mParam[_128BYTES];
 	char  mCarrierOperator[BUF_SIZE_8BYTE];
-	long int mProvince;
+	//long int mProvince;
+	std::string mProvince;
 	long int mQueryLimits;
 }QUERYAPIINFO_S;
 
