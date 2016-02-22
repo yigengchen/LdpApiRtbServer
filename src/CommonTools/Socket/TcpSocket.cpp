@@ -260,7 +260,7 @@ int CTcpSocket::TcpConnect(const in_port_t in_portPort, const std::string& strIp
 	//stTimeval.tv_sec = m_uiTimeout;
 	//stTimeval.tv_usec = 0;
 	
-	stTimeval.tv_sec = 0;
+	stTimeval.tv_sec = 1;
 	stTimeval.tv_usec = m_uiTimeout;
 	if (-1 == setsockopt(m_iSockfd, SOL_SOCKET, SO_SNDTIMEO, &stTimeval, sizeof(stTimeval))) {
 		return -1;
