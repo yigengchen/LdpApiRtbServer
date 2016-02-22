@@ -2322,10 +2322,11 @@ HIVELOCALLOG_S stHiveLog;
 		}
 		else
 		{
-			//CUserQueryWorkThreads::m_vecReport[m_uiThreadId].m_strUserInfo[stResponseInfo.ssOperatorName].m_ullEmptyResNum++;
+			CUserQueryWorkThreads::m_vecReport[m_uiThreadId].m_strUserInfo[stResponseInfo.ssOperatorName].m_ullEmptyResNum++;
 			m_pDataRedis->UserIncr(stResponseInfo.ssOperatorNameKeyEmptyRes);
 			delete jReader;
-			return ERRORNODATA;
+			//return ERRORNODATA;
+			return SUCCESS;
 
 		}
 
