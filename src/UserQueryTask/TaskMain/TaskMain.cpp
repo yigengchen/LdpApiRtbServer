@@ -1640,6 +1640,11 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 													delete remoteSocket;
 													goto Label;
 												}
+												else
+												{
+													remoteSocket->TcpClose();
+													delete remoteSocket;
+												}
 												
 												//lenStrTemp = stResponseInfo.mResValue.length();
 												//if( stResponseInfo.mResValue.find("\r\n\r\n")!=std::string::npos )
