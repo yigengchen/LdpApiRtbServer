@@ -26,7 +26,7 @@
 class CTcpSocket
 {
 public:
-	CTcpSocket(const in_port_t in_portPort = 0, const std::string& strIp = "", const u_int uiTimeout = 300000);
+	CTcpSocket(const in_port_t in_portPort = 0, const std::string& strIp = "", const u_int uiTimeout = 900000);
 	virtual ~CTcpSocket() throw();
 
 	std::string TcpGetSip();
