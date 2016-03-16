@@ -186,7 +186,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 	bool bQueryGoods = false;
 	int iNoDataFlag = 0,isQueryAction = 0;
 	std::string	
-	ssUser,ssValue,ssKey,ssmoidValue,strUser,filterDate,strToken,strKey,strKeyType,strKeyFilter,tempstrKeyFilter,strShopId,strGoodsId,strProvince,strOperator,strRetKey,strMoId;
+	ssUser,ssValue,ssKey,ssmoidValue,strUser,filterDate,strToken,strKey,strKeyType,strTableName,strKeyFilter,tempstrKeyFilter,strShopId,strGoodsId,strProvince,strOperator,strRetKey,strMoId;
 	std::string strProvinceReq,strProvinceRes,strProvinceEmptyRes,strProvinceResTag,strOperatorName;
 	std::map<std::string,std::string> map_UserValueKey;
 	std::map<std::string,std::string>::iterator iter2;
@@ -320,6 +320,9 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 						strUser = map_UserValueKey.find(KEY_USER)->second;
 						strToken = map_UserValueKey.find(KEY_VALUE)->second;
 						strKey = map_UserValueKey.find(KEY_KEY)->second;
+						//strTableName = map_UserValueKey.find(KEY_TABLENAME)->second;
+
+						
 						strKeyType = map_UserValueKey.find(KEY_KEY_TYPE)->second;
 
 
@@ -919,6 +922,16 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 						//if((it->second.mProvince.find(strProvince)!=std::npos)||strProvince=="MIXXXX")
 						else 
 						{
+							if(map_UserValueKey.find(KEY_TABLENAME)!=map_UserValueKey.end())
+							{
+								strTableName = map_UserValueKey.find(KEY_TABLENAME)->second;
+							}
+							else
+							{
+								errorMsg = "E0004";
+								delete jReader;
+								return ERRORNODATA;
+							}
 							iQueryCategory = 4;
 							strProvinceReq="dianxin_ctc_req_";
 							strProvinceRes="dianxin_ctc_res_";
@@ -1544,7 +1557,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 										if(strKeyType=="M")//sladuid
 										{
 											//key="dsp_name="+strUser+"&cond=default&pidfa="+strKey;
-											key= strKey;
+											key= strKey+"&tablename="+strTableName;
 										}
 
 									strMd5Pass = BdxGetParamSign(strPassWord,"");

@@ -72,6 +72,7 @@
 #define KEY_USER		"user"
 #define KEY_RET_KEY		"rkey"
 #define KEY_VALUE 		"auth"
+#define KEY_TABLENAME	"tablename"
 #define KEY_SHOPID		"shopid"
 #define KEY_GOODSID		"goodsid"
 #define KEY_KEY 		"key"
