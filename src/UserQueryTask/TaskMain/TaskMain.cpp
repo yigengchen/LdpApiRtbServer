@@ -230,6 +230,8 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 	//memset(buf, 0, _8KBLEN);
 	memset(bufTemp, 0, PACKET);
 
+	m_clEmTime.TimeOn();
+	
 	iRes = m_pclSock->TcpRead(m_pszAdxBuf, _8KBLEN);
   	LOG(DEBUG,"Requrest= %s\n",m_pszAdxBuf);  
 	printf("Requrest= %s\n",m_pszAdxBuf);  
@@ -244,7 +246,7 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 	std::string tempssContent;
 	unsigned int ipos = ssContent.find(CTRL_N,0);
 	unsigned int jpos = ssContent.find(REQ_TYPE,0);
-	
+
 	if( std::string::npos !=jpos )
 	{
 		m_httpType = 1;
@@ -1490,7 +1492,9 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 											  	//return SUCCESS; 		
 									}
 										break;
-								case 4:							
+								case 4:				
+									m_clEmTime.TimeOff();
+									LOG(ERROR,"before link dianxin [thread: %d],[second: %d, Microsecond: %d]",m_uiThreadId,m_clEmTime.EmTimeGetSeconds(), m_clEmTime.EmTimeGetMicSeconds());
 									//if((it->second.mProvince == atol(strProvince.c_str())||strProvince == "null"||strProvince==""))
 									if((it->second.mProvince == strProvince)&&(it->second.mCarrierOperator ==strOperator))
 									{									
@@ -1633,10 +1637,16 @@ int CTaskMain::BdxGetHttpPacket(BDXREQUEST_S& stRequestInfo,BDXRESPONSE_S &stRes
 											delete jReader;
 											return ERRORNODATA;
 										}
+										m_clEmTime.TimeOff();
+										LOG(ERROR,"connect dianxin ,times= %d,##[thread: %d],[second: %d, Microsecond: %d]",queryTimes,m_uiThreadId,m_clEmTime.EmTimeGetSeconds(), m_clEmTime.EmTimeGetMicSeconds());
 										if(remoteSocket->TcpWrite(m_httpReq,strlen(m_httpReq))!=0)
 										{
+											m_clEmTime.TimeOff();
+											LOG(ERROR,"write to dianxin ,times= %d,##[thread: %d],[second: %d, Microsecond: %d]",queryTimes,m_uiThreadId,m_clEmTime.EmTimeGetSeconds(), m_clEmTime.EmTimeGetMicSeconds());
 											memset(remoteBuffer,0,_8KBLEN);
 											remoteSocket->TcpReadAll(remoteBuffer,_8KBLEN);	
+											m_clEmTime.TimeOff();
+											LOG(ERROR,"read from  dianxin ,times= %d,##[thread: %d],[second: %d, Microsecond: %d]",queryTimes,m_uiThreadId,m_clEmTime.EmTimeGetSeconds(), m_clEmTime.EmTimeGetMicSeconds());
 											if( strlen(remoteBuffer) > 0 )
 											{					
 												
